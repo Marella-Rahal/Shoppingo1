@@ -116,7 +116,6 @@ function SignUp() {
 
       //todo response data
     
-      console.log(res.data);
       localStorage.setItem('userToken',res.data.token);                                                     
       dispatch(registerUser(res.data));
 

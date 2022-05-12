@@ -1,4 +1,4 @@
-import React ,{useState,useEffect} from 'react';
+import React ,{useState} from 'react';
 import Navbar from '../Home/Navbar/Navbar';
 import LSbackground from '../../Images/SignUp2.jpg';
 import {
@@ -49,8 +49,8 @@ function LogIn() {
 
     try{
 
-      const res = await axios.post(
-        'https://jsonplaceholder.typicode.com/users',
+      var res = await axios.post(
+        'http://localhost:8080/auth/login',
         {
           email:email,
           password:pwd
@@ -81,8 +81,8 @@ function LogIn() {
         setErrMsg(<h4>No Server Response</h4>);
         showPopupNote();
       } 
-      else if (err.res.status === 400) {
-        setErrMsg(<h4>Missing Username or Password</h4>);
+      else if (err.res.status === 422) {
+        setErrMsg(<h4>{res.data.message}</h4>);
         showPopupNote();
       }
       else {

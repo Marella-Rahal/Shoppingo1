@@ -22,6 +22,7 @@ import SellerDashboard from './Components/SallerDashboard/SallerDashboard/Saller
 import Error from './Components/Error/Error';
 import GetUserData from './Components/GetData/GetUserData';
 import GetHomeData from './Components/GetData/GetHomeData';
+import GetPaymentData from './Components/GetData/GetPaymentData';
 
 function App(props) {
 
@@ -31,16 +32,17 @@ function App(props) {
 
 
                 <Route element={<GetHomeData/>}>
-
                   <Route path='/' element={<Homebody/>}/>
-                  
                 </Route> 
 
                 <Route element={<GetUserData/>}>
-
                   <Route path="/Profile" element={<Profile/>}/>
                   <Route path="/Mangment/InsertPayments" element={<InsertP/>}/>
-                  
+                  <Route path="/Mangment/InsertRequiredPayments" element={<InsertRequiredPayment/>}/>
+                </Route>
+
+                <Route element={<GetPaymentData/>}>
+                  <Route path="/Mangment/Payments" element={<Payment/>}/>
                 </Route>
 
                 <Route path='/Shop' element={<Shopbody/>}/>
@@ -63,11 +65,9 @@ function App(props) {
 
                 <Route path="/Mangment/Dashbord" element={<Dashboard/>}/>
 
-                <Route path="/Mangment/Payments" element={<Payment/>}/>
 
                 <Route path="/Mangment/RequiredPayments" element={<RequiredPayment/>}/>
 
-                <Route path="/Mangment/InsertRequiredPayments" element={<InsertRequiredPayment/>}/>
 
 
                 <Route path="/AddProduct" element={<AddProduct/>}/>

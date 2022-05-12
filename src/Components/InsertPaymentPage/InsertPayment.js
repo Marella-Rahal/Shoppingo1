@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import axios from'axios';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
+import axios from 'axios';
 import {
   Container,
   TopNavbar,
@@ -26,24 +26,25 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
-import { useDispatch,useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../Redux/Slices/UserSlice';
-
-
-
-
+import NotePopup from '../PopUp/NotePopup';
 
 function InsertP(props) {
+  const dispatch = useDispatch();
+  const [errMsg, setErrMsg] = useState('');
+
   const route = useNavigate();
-  const user=useSelector(state=>state.user);
+  const  user= useSelector((state) => state.user);
+  const token=localStorage.getItem("userToken");
   const [PaymentName, setPaymentName] = useState('');
   const [PaymentValue, setPaymentValue] = useState('');
   const [PaymentDate, setPaymentDate] = useState('');
   const [PaymentType, setPaymentType] = useState('');
-  console.log(PaymentName);
-  console.log(PaymentValue);
-  console.log(PaymentDate);
-  console.log(PaymentType);
+  // console.log(PaymentName);
+  // console.log(PaymentValue);
+  // console.log(PaymentDate);
+  // console.log(PaymentType);
 
   const handlePopup = (e) => {
     e.preventDefault();
@@ -51,22 +52,46 @@ function InsertP(props) {
     $('.fullscreen').fadeTo(700, 1);
     $('body').css('overflow', 'hidden');
   };
+  const showPopupNote = () => {
+    $('.fullscreenNote').fadeTo(500, 1);
+    $('.popupNote').fadeTo(500, 1);
+    $('body').css('overflow', 'hidden');
+  };
   const sendData = (e) => {
     e.preventDefault();
     axios.post(
-      'https://jsonplaceholder.typicode.com/users',
-      JSON.stringify({
-        name: PaymentName,
-        value: PaymentValue,
-        Date: PaymentDate,
-        Type: PaymentType,
-      })
-
-    );
+        'http://localhost:8080/managment/addpayment',
+        {
+          name: PaymentName,
+          value: PaymentValue,
+          Date: PaymentDate,
+          Type: PaymentType,
+        },
+        {
+          headers: {
+            authorization: `bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => dispatch(registerUser(res.data)))
+      .catch((err) => {
+        if (!err.res) {
+          setErrMsg(<h4>No Server Response</h4>);
+          showPopupNote();
+        } else if (err.res.status === 422) {
+          setErrMsg(<h4>Username Taken</h4>);
+          showPopupNote();
+        } else {
+          setErrMsg(<h4>Failed</h4>);
+          showPopupNote();
+        }
+      });
   };
 
   return (
     <Container>
+      <NotePopup msg={errMsg} color="red" />
+
       <IncomePopup title="Please Insert Your Income Value" />
       <SideNavbar />
       <InnerContainer>
@@ -101,7 +126,7 @@ function InsertP(props) {
             </Link>
 
             <div style={{ marginTop: '10px', fontSize: '15px' }}>
-              Hello,Hasan
+              Hello,{user.user.name}
             </div>
             <HeaderImage
               onClick={() => {
@@ -123,7 +148,7 @@ function InsertP(props) {
                   alignItems: 'center',
                 }}
               >
-                <Paragraph>{user.user.income}S.P</Paragraph>
+                <Paragraph>{user.user.income} S.P</Paragraph>
                 <button
                   style={{
                     background: 'none',
@@ -184,7 +209,7 @@ function InsertP(props) {
             }}
           ></hr>
 
-          <form action="/action_page.php" method="get" id="form1">
+          <form onSubmit={sendData} id="form1">
             <FormContainer
               style={{
                 display: 'flex',
@@ -198,6 +223,7 @@ function InsertP(props) {
                     type="text"
                     placeholder="Mashaoui"
                     onChange={(e) => setPaymentName(e.target.value)}
+                    required
                   ></Input>
                 </InputContainer>
                 <InputContainer>
@@ -206,6 +232,7 @@ function InsertP(props) {
                     type="date"
                     style={{ fontSize: '25px', color: 'gray', padding: '10px' }}
                     onChange={(e) => setPaymentDate(e.target.value)}
+                    required
                   ></Input>
                 </InputContainer>
               </InputContainer>
@@ -216,12 +243,14 @@ function InsertP(props) {
                     type="number"
                     placeholder="200000"
                     onChange={(e) => setPaymentValue(e.target.value)}
+                    required
                   ></Input>
                 </InputContainer>
                 <InputContainer>
                   <Label>payment Type</Label>
                   <select
                     id="cars"
+                    required
                     name="cars"
                     style={{
                       border: 'none',
@@ -235,6 +264,7 @@ function InsertP(props) {
                     <option defaultValue="" disabled hidden>
                       Options
                     </option>
+                    <option defaultValue="Others">Others</option>
                     <option defaultValue="Food">Food</option>
                     <option defaultValue="Clothes">Clothes</option>
                     <option defaultValue="School Cost">School Cost</option>
@@ -245,16 +275,14 @@ function InsertP(props) {
                       Health insurance
                     </option>
                     <option defaultValue="Entertainment">Entertainment</option>
-                    <option defaultValue="Others">Others</option>
                   </select>
                 </InputContainer>
               </InputContainer>
             </FormContainer>
+            <Button type="submit" form="form1" value="Submit" style={{marginLeft: "415px"}}>
+              Insert Payment
+            </Button>
           </form>
-          <Button type="submit" form="form1" value="Submit" onClick={sendData}>
-            {' '}
-            Insert Payment
-          </Button>
         </Content>
       </InnerContainer>
     </Container>
