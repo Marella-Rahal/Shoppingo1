@@ -59,6 +59,7 @@ function LogIn() {
 
       //todo response data
 
+      // console.log(res);
       localStorage.setItem('userToken',res.data.token);        
       dispatch(registerUser(res.data));
 
@@ -77,16 +78,17 @@ function LogIn() {
     }
     catch(err){
 
-      if (!err.res) {
-        setErrMsg(<h4>No Server Response</h4>);
+      // console.log(err);
+      if (!err.response){
+        setErrMsg(<h4 >No Server Response</h4>);
         showPopupNote();
-      } 
-      else if (err.res.status === 422) {
-        setErrMsg(<h4>{res.data.message}</h4>);
+      }
+      else if(err.response.status!==200&&err.response.status!==201){
+        setErrMsg(<h4>{err.response.data.message}</h4>);
         showPopupNote();
       }
       else {
-        setErrMsg(<h4>Login Failed</h4>);
+        setErrMsg(<h4>Log In Failed</h4>);
         showPopupNote();
       }
 

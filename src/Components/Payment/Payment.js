@@ -13,11 +13,14 @@ import PaymentItem from './PaymentItem.js';
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
+import { useSelector } from 'react-redux';
 
 
 
 function Payment (props){
     const route=useNavigate();
+    const user=useSelector(state=>state.user.user);
+    const payment=useSelector(state=>state.pay.payment)
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -54,7 +57,7 @@ function Payment (props){
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello,Hasan</div>
+                        Hello , {user.name}</div>
 
                         <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
 
@@ -70,7 +73,7 @@ function Payment (props){
 
                             <Paragraph>Total income</Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>335,000 S.P</Paragraph>
+                            <Paragraph>{user.income} S.P</Paragraph>
                             <button style={{background:"none",border:"none",color: "#11324D"}} onClick={handlePopup}>
                                 <AddCircleOutlineIcon style={{ marginRight: "15px", fontSize: "xx-large" }}></AddCircleOutlineIcon>
                             </button>
@@ -79,7 +82,7 @@ function Payment (props){
 
                         <PaymentsInfo style={{ margin: '0px 5%' }}>
                             <Paragraph>Balance</Paragraph>
-                            <Paragraph>200,500 S.P</Paragraph>
+                            <Paragraph>{user.totalBalance} S.P</Paragraph>
                         
                         </PaymentsInfo>
 
@@ -88,7 +91,7 @@ function Payment (props){
                             Total Payments
                             </Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>134,500 S.P </Paragraph>
+                            <Paragraph>{user.totalPayments} S.P </Paragraph>
                             
                             <Link to='/Mangment/Dashbord' style={{ marginRight: "10px",textDecoration: "none" , color: "#6b7aa1" ,fontSize:"small"}}>View All<KeyboardDoubleArrowRightIcon style={{fontSize:"small"}}/></Link>
                             </div>
@@ -106,7 +109,7 @@ function Payment (props){
                             Price  <ArrowDropDown />
 
                             <div className='menufilter'>
-                                <button className='btn-filter' type='button'>Low To Hight</button>
+                                <button  className='btn-filter' type='button'>Low To Hight</button>
                                 <button className='btn-filter' type='button'>Hight To Low</button>
                             </div >
                         </div>
@@ -143,6 +146,11 @@ function Payment (props){
 
                     <div style={{display:'flex',flexWrap:'wrap',justifyContent:'space-evenly',width:'97%'}}>
 
+                        {payment.map((pay,index)=>{
+                            return <PaymentItem key={index} name={pay.name} value={pay.value} date={pay.date} type={pay.type}/>
+                        })}
+
+                        {/* //! remove it after filling the database */}
                         <PaymentItem/>
                         <PaymentItem/>
                         <PaymentItem/>

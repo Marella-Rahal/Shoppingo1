@@ -40,7 +40,7 @@ function InsertP(props) {
   const [PaymentName, setPaymentName] = useState('');
   const [PaymentValue, setPaymentValue] = useState('');
   const [PaymentDate, setPaymentDate] = useState('');
-  const [PaymentType, setPaymentType] = useState('');
+  const [PaymentType, setPaymentType] = useState('Others');
   // console.log(PaymentName);
   // console.log(PaymentValue);
   // console.log(PaymentDate);
@@ -57,9 +57,11 @@ function InsertP(props) {
     $('.popupNote').fadeTo(500, 1);
     $('body').css('overflow', 'hidden');
   };
-  const sendData = (e) => {
+  const sendData = async (e) => {
     e.preventDefault();
-    axios.post(
+    try {
+
+      var res=await axios.post(
         'http://localhost:8080/managment/addpayment',
         {
           name: PaymentName,
@@ -72,20 +74,30 @@ function InsertP(props) {
             authorization: `bearer ${token}`,
           },
         }
-      )
-      .then((res) => dispatch(registerUser(res.data)))
-      .catch((err) => {
-        if (!err.res) {
-          setErrMsg(<h4>No Server Response</h4>);
-          showPopupNote();
-        } else if (err.res.status === 422) {
-          setErrMsg(<h4>Username Taken</h4>);
-          showPopupNote();
-        } else {
-          setErrMsg(<h4>Failed</h4>);
-          showPopupNote();
-        }
-      });
+      )  
+
+      // console.log(res);
+      dispatch(registerUser(res.data));
+
+    } catch (err) {
+
+      // console.log(err);
+
+      if (!err.response){
+        setErrMsg(<h4 >No Server Response</h4>);
+        showPopupNote();
+      }
+      else if(err.response.status!==200&&err.response.status!==201){
+        setErrMsg(<h4>{err.response.data.message}</h4>);
+        showPopupNote();
+      }
+      else {
+        setErrMsg(<h4>Failed</h4>);
+        showPopupNote();
+      }
+      
+    }
+
   };
 
   return (
@@ -250,7 +262,6 @@ function InsertP(props) {
                   <Label>payment Type</Label>
                   <select
                     id="cars"
-                    required
                     name="cars"
                     style={{
                       border: 'none',

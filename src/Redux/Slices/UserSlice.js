@@ -36,6 +36,7 @@ const UserSlice=createSlice({
             let x=action.payload;
             
             state.message=x.message;
+
             state.user.name=x.user.name;
             state.user.email=x.user.email;
             state.user.password=x.user.password;
@@ -52,10 +53,10 @@ const UserSlice=createSlice({
             state.user.createdAt=x.user.createdAt; 
             state.user.updatedAt=x.user.updatedAt; 
             state.user.v=x.user.v; 
+
             state.token=x.token;
 
         },
-
     }
     
 });

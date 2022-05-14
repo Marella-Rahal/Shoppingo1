@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import {Navigate, Outlet, useLocation} from 'react-router';
+import {Navigate, Outlet , useLocation, useNavigate} from 'react-router';
 import { updatePayment } from '../../Redux/Slices/PaymentSlice';
 import { registerUser } from '../../Redux/Slices/UserSlice';
 
@@ -10,6 +10,7 @@ function GetPaymentData(props) {
     const token=localStorage.getItem('userToken');
     const location=useLocation();
     const dispatch=useDispatch();
+    const route=useNavigate();
 
     if(token){
 
@@ -23,10 +24,8 @@ function GetPaymentData(props) {
             dispatch(updatePayment(res.data.pay));
             
         }).catch(err=>{
-            // console.log(err.message);
-            if(err.res.status!==200 && err.res.status!==201){
-                <Navigate to='/Error' state={{ from : location }} replace/>
-            }
+
+            route('/Error',{replace:true});
             
         })
 

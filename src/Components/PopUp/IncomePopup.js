@@ -30,7 +30,6 @@ export const Popup = styled.div`
 function IncomePopup(props) {
   const [TotalIncome, setTotalIncome] = useState(0);
   const dispatch = useDispatch();
-  // const { token } = useSelector((state) => state.user.user.token);
   const token=localStorage.getItem("userToken");
   const [errMsg, setErrMsg] = useState('');
 
@@ -67,13 +66,15 @@ function IncomePopup(props) {
             window.location.reload(true);
         })
         .catch((err)=>{
-          if (!err.res) {
-            setErrMsg(<h4>No Server Response</h4>);
+          if (!err.response){
+            setErrMsg(<h4 >No Server Response</h4>);
             showPopupNote();
-          } else if (err.res.status === 422) {
-            setErrMsg(<h4>Username Taken</h4>);
+          }
+          else if(err.response.status!==200&&err.response.status!==201){
+            setErrMsg(<h4>{err.response.data.message}</h4>);
             showPopupNote();
-          } else {
+          }
+          else {
             setErrMsg(<h4>Failed</h4>);
             showPopupNote();
           }

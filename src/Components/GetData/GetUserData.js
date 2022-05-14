@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import {Navigate, Outlet, useLocation} from 'react-router';
+import {Navigate, Outlet, useLocation, useNavigate} from 'react-router';
 import { registerUser } from '../../Redux/Slices/UserSlice';
 
 function GetProfileData(props) {
@@ -9,6 +9,7 @@ function GetProfileData(props) {
     const token=localStorage.getItem('userToken');
     const location=useLocation();
     const dispatch=useDispatch();
+    const route=useNavigate();
 
     if(token){
 
@@ -21,10 +22,8 @@ function GetProfileData(props) {
             dispatch(registerUser(res.data));
             
         }).catch(err=>{
-            // console.log(err.message);
-            if(err.res.status!==200 && err.res.status!==201){
-                <Navigate to='/Error' state={{ from : location }} replace/>
-            }
+            // console.log(err);
+            route('/Error',{replace:true});    
         })
 
         return <Outlet/>;

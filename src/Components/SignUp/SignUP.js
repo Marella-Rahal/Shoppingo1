@@ -104,7 +104,7 @@ function SignUp() {
 
     try{
 
-      var res = await axios.post(
+      const res = await axios.post(
         'http://localhost:8080/auth/signup',
         {
           name:user,
@@ -113,9 +113,9 @@ function SignUp() {
         }
       )
 
-
       //todo response data
     
+      // console.log(res);
       localStorage.setItem('userToken',res.data.token);                                                     
       dispatch(registerUser(res.data));
 
@@ -131,12 +131,13 @@ function SignUp() {
 
     }catch(err){
 
-      if (!err.res){
+      // console.log(err);
+      if (!err.response){
         setErrMsg(<h4 >No Server Response</h4>);
         showPopupNote();
       }
-      else if (err.res.status !==200 &&err.res.status !==201) {
-        setErrMsg(<h4>{res.data.message}</h4>);
+      else if(err.response.status!==200&&err.response.status!==201){
+        setErrMsg(<h4>{err.response.data.message}</h4>);
         showPopupNote();
       }
       else {
