@@ -52,7 +52,7 @@ function IncomePopup(props) {
        axios.post(
           'http://localhost:8080/managment/addIncome',
           {
-            income: TotalIncome,
+            value: TotalIncome,
           },
           {
             headers: { authorization: `bearer ${ token } `},
@@ -63,15 +63,20 @@ function IncomePopup(props) {
             $('.popupdiv').fadeOut(500);
             $('.fullscreen').fadeOut(500);
             $('body').css('overflow', 'auto');
-            window.location.reload(true);
         })
         .catch((err)=>{
+
+          // console.log(err)
           if (!err.response){
             setErrMsg(<h4 >No Server Response</h4>);
             showPopupNote();
           }
-          else if(err.response.status!==200&&err.response.status!==201){
+          else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
             setErrMsg(<h4>{err.response.data.message}</h4>);
+            showPopupNote();
+          }
+          else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+            setErrMsg(<h4>{err.message}</h4>);
             showPopupNote();
           }
           else {

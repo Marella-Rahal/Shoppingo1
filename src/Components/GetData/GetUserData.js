@@ -18,7 +18,7 @@ function GetProfileData(props) {
                 authorization : `bearer ${token}`
             }
         }).then(res=>{
-            // console.log(res.data);
+            // console.log(res);
             dispatch(registerUser(res.data));
             
         }).catch(err=>{

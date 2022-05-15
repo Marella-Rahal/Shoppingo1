@@ -9,32 +9,25 @@ function PaymentItem({name,value,date,type}) {
             <span>
                 Payment Name : &nbsp;&nbsp;
                 <span style={{color:'#11324D',fontWeight:'normal'}}>
-                     {/* //! remove it after filling the database */}
-                    Mashaoui
                     {name}
                 </span>
             </span>
             <span>
                 Payment Value : &nbsp;&nbsp;
                 <span style={{color:'#11324D',fontWeight:'normal'}}>
-                    {/* //! remove it after filling the database */}
-                    350000
                     {value}
                 </span>
             </span>
             <span>
                 Payment Date : &nbsp;&nbsp;
                 <span style={{color:'#11324D',fontWeight:'normal'}}>
-                {/* //! remove it after filling the database */}
-                    21/6/2022
                     {date}
                 </span>
             </span>
             <span>
                 Payment Type : &nbsp;&nbsp;
                 <span style={{color:'#11324D',fontWeight:'normal'}}>
-                {/* //! remove it after filling the database */}
-                    Food
+
                     {type}
                 </span>
             </span>

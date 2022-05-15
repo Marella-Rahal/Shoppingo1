@@ -49,7 +49,7 @@ function LogIn() {
 
     try{
 
-      var res = await axios.post(
+      const res = await axios.post(
         'http://localhost:8080/auth/login',
         {
           email:email,
@@ -59,7 +59,7 @@ function LogIn() {
 
       //todo response data
 
-      // console.log(res);
+      // console.log(res.data);
       localStorage.setItem('userToken',res.data.token);        
       dispatch(registerUser(res.data));
 
@@ -83,12 +83,16 @@ function LogIn() {
         setErrMsg(<h4 >No Server Response</h4>);
         showPopupNote();
       }
-      else if(err.response.status!==200&&err.response.status!==201){
+      else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
         setErrMsg(<h4>{err.response.data.message}</h4>);
         showPopupNote();
       }
+      else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+        setErrMsg(<h4>{err.message}</h4>);
+        showPopupNote();
+      }
       else {
-        setErrMsg(<h4>Log In Failed</h4>);
+        setErrMsg(<h4>Log in Failed</h4>);
         showPopupNote();
       }
 

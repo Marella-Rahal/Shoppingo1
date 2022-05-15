@@ -1,4 +1,5 @@
-import React from 'react';
+import React ,{useState}from 'react';
+import axios from 'axios';
 import {Container,InnerContainer,TopNavbar,Content,Label} from '../AddProduct/Home/AddProductCss.js';
 import {HeaderImage} from '../Profile/ProfileInfoCss';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
@@ -10,6 +11,8 @@ import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArrowRight';
 import { PaymentsContainer, PaymentsInfo, Paragraph,Input, InputContainer, Button,FormContainer} from '../InsertPaymentPage/InsertPaymentcss';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../../Redux/Slices/UserSlice';
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
@@ -51,7 +54,75 @@ function InsertRequiredPayment(props){
         $('body').css("overflow","hidden");
     }
 
-    return(
+const user=useSelector((state)=>state.user);
+
+const dispatch = useDispatch();
+const [errMsg, setErrMsg] = useState('');
+const token=localStorage.getItem("userToken");
+
+
+
+const [Name , setName]=useState('');
+const [Value, setValue] = useState('');
+const [Date, setDate] = useState('');
+const [Type, setType] = useState('');
+const [Repeater,setRepeater] = useState('');
+
+
+// console.log(Name);
+// console.log(Value);
+// console.log(Date);
+// console.log(Type);
+// console.log(Repeater);
+
+const showPopupNote = () => {
+    $('.fullscreenNote').fadeTo(500, 1);
+    $('.popupNote').fadeTo(500, 1);
+    $('body').css('overflow', 'hidden');
+  };
+
+const sendDate = (e) => {
+    e.preventDefault();
+    axios.post(
+            'http://localhost:8080/managment/addPaymentReq',
+            {
+                name : Name ,
+                value :Value ,
+                date : Date ,
+                type : Type ,
+                isRepeater : Repeater ,
+            },
+            {
+                header:{Authorization: `bearer ${token}`,}
+            }
+        )
+    .then((res)=>{
+        dispatch(registerUser(res.data));
+        route('/Mangment/RequiredPayments');
+    })
+    .catch((err) => {
+        if (!err.response){
+            setErrMsg(<h4 >No Server Response</h4>);
+            showPopupNote();
+          }
+          else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
+            setErrMsg(<h4>{err.response.data.message}</h4>);
+            showPopupNote();
+          }
+          else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+            setErrMsg(<h4>{err.message}</h4>);
+            showPopupNote();
+          }
+          else {
+            setErrMsg(<h4>Failed</h4>);
+            showPopupNote();
+          }
+      });
+}
+
+
+
+return(
         <Container>
             <IncomePopup title="Please Insert Your Income Value"/>
             <SideNavbar/>
@@ -78,7 +149,7 @@ function InsertRequiredPayment(props){
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello,Hasan</div>
+                        Hello,{user.user.name}</div>
 
                         <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
 
@@ -94,7 +165,7 @@ function InsertRequiredPayment(props){
 
                             <Paragraph>Total income</Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>335,000 S.P</Paragraph>
+                            <Paragraph>{user.user.income} S.P</Paragraph>
                             <button style={{background:"none",border:"none",color: "#11324D"}} onClick={handlePopup}>
                                 <AddCircleOutlineIcon style={{ marginRight: "15px", fontSize: "xx-large" }}></AddCircleOutlineIcon>
                             </button>
@@ -103,7 +174,7 @@ function InsertRequiredPayment(props){
 
                         <PaymentsInfo style={{ margin: '0px 5%' }}>
                             <Paragraph>Balance</Paragraph>
-                            <Paragraph>200,500 S.P</Paragraph>
+                            <Paragraph>{user.user.totalBalance} S.P</Paragraph>
                         
                         </PaymentsInfo>
 
@@ -112,7 +183,7 @@ function InsertRequiredPayment(props){
                             Total Payments
                             </Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>134,500 S.P </Paragraph>
+                            <Paragraph>{user.user.totalPayments} S.P </Paragraph>
                             
                             <Link to='/Mangment/Dashbord' style={{ marginRight: "10px",textDecoration: "none" , color: "#6b7aa1" ,fontSize:"small"}}>View All<KeyboardDoubleArrowRightIcon style={{fontSize:"small"}}/></Link>
                             </div>
@@ -131,7 +202,7 @@ function InsertRequiredPayment(props){
                         marginTop:'0px'
                     }}></hr>
 
-                    <form action="/action_page.php" method="get" id="form1">
+                    <form  id="form1" onSubmit={sendDate}>
                         <FormContainer style={{
                         display: "flex",
                         marginTop: "20px",
@@ -141,12 +212,12 @@ function InsertRequiredPayment(props){
 
                                 <InputContainer>
                                 <Label>payment Name</Label>
-                                <Input type="text" placeholder='Bank'></Input>
+                                <Input type="text" placeholder='Name' required onChange={(e)=>setName(e.target.value)}></Input>
                                 </InputContainer>
 
                                 <InputContainer>
                                 <Label>Last date to pay</Label>
-                                <Input type="date" style={{ fontSize: '25px', color: 'gray', padding: '10px' }}></Input>
+                                <Input type="date" required style={{ fontSize: '25px', color: 'gray', padding: '10px' } } onChange={(e)=>setDate(e.target.value)}></Input>
                                 </InputContainer>
 
                             </InputContainer>
@@ -155,12 +226,14 @@ function InsertRequiredPayment(props){
 
                                 <InputContainer>
                                 <Label>payment Value</Label>
-                                <Input type="number" placeholder='200000'></Input>
+                                <Input type="number" required placeholder='Value' onChange={(e)=>setValue(e.target.value)}></Input>
                                 </InputContainer>
 
                                 <InputContainer>
                                     <Label>payment Type</Label>
                                     <select
+                                    required
+                                    onChange={(e)=>setType(e.target.value)}
                                     id="cars"
                                     name="cars"
                                     style={{
@@ -171,6 +244,7 @@ function InsertRequiredPayment(props){
                                     color: 'black',
                                     }}
                                     >
+                                    <option defaultValue="Others">Others</option>
                                     <option defaultValue="" disabled hidden>
                                         Options
                                     </option>
@@ -178,7 +252,7 @@ function InsertRequiredPayment(props){
                                     <option defaultValue="Rent">Rent</option>
                                     <option defaultValue="Bills">Bills</option>
                                     <option defaultValue="Debt">Debt</option>
-                                    <option defaultValue="Others">Others</option>
+                                   
                                     </select>
                                 </InputContainer>
 
@@ -191,15 +265,15 @@ function InsertRequiredPayment(props){
                                 <Label>Payment Repeater</Label>
                                 <div style={{display:'flex',marginTop:'7px'}}>
                                     <label for='Yes'>Yes</label>
-                                    <Radio type="radio" name='repeater' id='Yes' />
+                                    <Radio type="radio" required name='repeater' id='Yes' onClick={()=>setRepeater('True')}/>
                                     <label for='No'>No</label>
-                                    <Radio type="radio" name='repeater' id='No' />
+                                    <Radio type="radio" required name='repeater' id='No' onClick={()=>setRepeater('False')}/>
                                 </div>
                         </InputContainer>
+                        <Button type="submit"  style={{marginInline:'20%'}}> Insert Payment</Button>
 
-                     </form>
+                    </form>
 
-                    <Button type="submit" form="form1" value="Submit" style={{marginInline:'20%'}}> Insert Payment</Button>
 
                 </Content>
                 

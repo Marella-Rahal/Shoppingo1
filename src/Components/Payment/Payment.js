@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState} from 'react';
 import {Container,InnerContainer,TopNavbar,Content} from '../AddProduct/Home/AddProductCss.js';
 import {HeaderImage} from '../Profile/ProfileInfoCss';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
@@ -13,14 +13,26 @@ import PaymentItem from './PaymentItem.js';
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import { updatePayment } from '../../Redux/Slices/PaymentSlice.js';
+import NotePopup from '../PopUp/NotePopup.js';
 
 
 
 function Payment (props){
     const route=useNavigate();
     const user=useSelector(state=>state.user.user);
-    const payment=useSelector(state=>state.pay.payment)
+    const payment=useSelector(state=>state.pay.payment);
+    const token=localStorage.getItem('userToken');
+    const dispatch=useDispatch();
+    const [errMsg,setErrMsg]=useState('');
+
+    const showPopupNote=()=>{
+        $(".fullscreenNote").fadeTo(500,1);
+        $(".popupNote").fadeTo(500,1);
+        $("body").css("overflow","hidden");
+     }
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -29,9 +41,76 @@ function Payment (props){
         $('body').css("overflow","hidden");
     }
 
+    const handleFilter= async (filter,value)=>{
+        // console.log(filter);
+        // console.log(value);
+
+        let f_price,f_date,f_type;
+        if(filter==='price'){
+            f_price=value;
+            f_date='';
+            f_type='';
+        }
+        else if(filter==='date'){
+            f_price='';
+            f_date=value;
+            f_type='';
+        }
+        else{
+            f_price='';
+            f_date='';
+            f_type=value;
+        }
+
+        try {
+            
+            const res=await axios.get(
+                'http://localhost:8080/managment/filterpayments',
+                {
+                    filterbyprice:f_price,
+                    filterbydate:f_date,
+                    filterbytype:f_type,
+                },
+                {
+                    Headers:{
+                        authorization : `Bearer ${token}`
+                    }
+                });
+
+            //!remove it 
+            console.log(res.data);
+
+            dispatch(updatePayment(res.data.pay));   
+
+        } catch (err) {
+            
+            //! remove it
+            console.log(err);
+
+            if (!err.response){
+                setErrMsg(<h4 >No Server Response</h4>);
+                showPopupNote();
+            }
+            else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
+                setErrMsg(<h4>{err.response.data.message}</h4>);
+                showPopupNote();
+            }
+            else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+                setErrMsg(<h4>{err.message}</h4>);
+                showPopupNote();
+            }
+            else {
+                setErrMsg(<h4>Failed</h4>);
+                showPopupNote();
+            }
+            
+        }
+    }
+
     return(
 
         <Container>
+            <NotePopup msg={errMsg} color='red'/>
             <IncomePopup title="Please Insert Your Income Value"/>
             <SideNavbar/>
             <InnerContainer>
@@ -57,7 +136,7 @@ function Payment (props){
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello , {user.name}</div>
+                        Hello, {user.name}</div>
 
                         <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
 
@@ -109,32 +188,32 @@ function Payment (props){
                             Price  <ArrowDropDown />
 
                             <div className='menufilter'>
-                                <button  className='btn-filter' type='button'>Low To Hight</button>
-                                <button className='btn-filter' type='button'>Hight To Low</button>
+                                <button  className='btn-filter' type='button' onClick={()=>handleFilter('price','low')}>Low To Hight</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('price','hight')}>Hight To Low</button>
                             </div >
                         </div>
 
                         <div className='filter'>
                             date of Payment  <ArrowDropDown />
                             <div className='menufilter' style={{left:'40px'}}>
-                                <button className='btn-filter' type='button'>Oldest To Newest</button>
-                                <button className='btn-filter' type='button'>Newest To Oldest</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','low')}>Oldest To Newest</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','hight')}>Newest To Oldest</button>
                             </div>
                         </div>
 
                         <div className='filter'>
                             payment type  <ArrowDropDown />
                             <div className='menufilter' style={{left:'40px'}}>
-                                <button className='btn-filter' type='button'>Food</button>
-                                <button className='btn-filter' type='button'>Clothes</button>
-                                <button className='btn-filter' type='button'>School Cost</button>
-                                <button className='btn-filter' type='button'>Transportation</button>
-                                <button className='btn-filter' type='button'>Health insurance</button>
-                                <button className='btn-filter' type='button'>Entertainment</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','food')}>Food</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','clothes')}>Clothes</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','school cost')}>School Cost</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','transportation')}>Transportation</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','health insurance')}>Health insurance</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','entertainment')}>Entertainment</button>
                             </div>
                         </div>
 
-                        <button type='button' onClick={()=>{route('/Mangment/InsertRequiredPayments')}} className="btn-insert">Insert New Payment</button>
+                        <button type='button' onClick={()=>{route('/Mangment/InsertPayments')}} className="btn-insert">Insert New Payment</button>
 
                     </div>
 
@@ -150,14 +229,6 @@ function Payment (props){
                             return <PaymentItem key={index} name={pay.name} value={pay.value} date={pay.date} type={pay.type}/>
                         })}
 
-                        {/* //! remove it after filling the database */}
-                        <PaymentItem/>
-                        <PaymentItem/>
-                        <PaymentItem/>
-                        <PaymentItem/>
-                        <PaymentItem/>
-                        <PaymentItem/>
-                        <PaymentItem/>
 
                     </div>
 

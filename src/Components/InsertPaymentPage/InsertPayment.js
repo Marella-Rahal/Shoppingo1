@@ -41,10 +41,10 @@ function InsertP(props) {
   const [PaymentValue, setPaymentValue] = useState('');
   const [PaymentDate, setPaymentDate] = useState('');
   const [PaymentType, setPaymentType] = useState('Others');
-  // console.log(PaymentName);
-  // console.log(PaymentValue);
-  // console.log(PaymentDate);
-  // console.log(PaymentType);
+  // console.log(PaymentName,typeof(PaymentName));
+  // console.log(PaymentValue,typeof(PaymentValue));
+  // console.log(PaymentDate,typeof(PaymentDate));
+  // console.log(PaymentType,typeof(PaymentType));
 
   const handlePopup = (e) => {
     e.preventDefault();
@@ -61,13 +61,13 @@ function InsertP(props) {
     e.preventDefault();
     try {
 
-      var res=await axios.post(
+      const res=await axios.post(
         'http://localhost:8080/managment/addpayment',
         {
           name: PaymentName,
           value: PaymentValue,
-          Date: PaymentDate,
-          Type: PaymentType,
+          date: PaymentDate,
+          type: PaymentType,
         },
         {
           headers: {
@@ -76,19 +76,21 @@ function InsertP(props) {
         }
       )  
 
-      // console.log(res);
       dispatch(registerUser(res.data));
+      route('/Mangment/Payments');
 
     } catch (err) {
-
-      // console.log(err);
 
       if (!err.response){
         setErrMsg(<h4 >No Server Response</h4>);
         showPopupNote();
       }
-      else if(err.response.status!==200&&err.response.status!==201){
+      else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
         setErrMsg(<h4>{err.response.data.message}</h4>);
+        showPopupNote();
+      }
+      else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+        setErrMsg(<h4>{err.message}</h4>);
         showPopupNote();
       }
       else {

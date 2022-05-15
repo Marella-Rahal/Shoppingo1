@@ -131,13 +131,16 @@ function SignUp() {
 
     }catch(err){
 
-      // console.log(err);
       if (!err.response){
         setErrMsg(<h4 >No Server Response</h4>);
         showPopupNote();
       }
-      else if(err.response.status!==200&&err.response.status!==201){
+      else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
         setErrMsg(<h4>{err.response.data.message}</h4>);
+        showPopupNote();
+      }
+      else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+        setErrMsg(<h4>{err.message}</h4>);
         showPopupNote();
       }
       else {
