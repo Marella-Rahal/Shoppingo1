@@ -61,7 +61,7 @@ function Payment (props){
             // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
 
         }
-        else{
+        else if(filter==='type'){
             f_price='';
             f_date='';
             f_type=value;
@@ -206,12 +206,12 @@ function Payment (props){
                         <div className='filter'>
                             payment type  <ArrowDropDown />
                             <div className='menufilter' style={{left:'40px'}}>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','food')}>Food</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','clothes')}>Clothes</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','school cost')}>School Cost</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','transportation')}>Transportation</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','health insurance')}>Health insurance</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','entertainment')}>Entertainment</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','Food')}>Food</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','Clothes')}>Clothes</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','School Cost')}>School Cost</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','Transportation')}>Transportation</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','Health insurance')}>Health insurance</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('type','Entertainment')}>Entertainment</button>
                             </div>
                         </div>
 
