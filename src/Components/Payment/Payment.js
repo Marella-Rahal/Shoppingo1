@@ -50,43 +50,45 @@ function Payment (props){
             f_price=value;
             f_date='';
             f_type='';
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
         }
         else if(filter==='date'){
             f_price='';
             f_date=value;
             f_type='';
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
+
         }
         else{
             f_price='';
             f_date='';
             f_type=value;
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
+
         }
 
         try {
             
-            const res=await axios.get(
-                'http://localhost:8080/managment/filterpayments',
+            const res=await axios.post(
+                'http://localhost:5000/managment/filterpayments',
                 {
                     filterbyprice:f_price,
                     filterbydate:f_date,
                     filterbytype:f_type,
                 },
                 {
-                    Headers:{
+                    headers:{
                         authorization : `Bearer ${token}`
                     }
                 });
 
-            //!remove it 
-            console.log(res.data);
-
-            dispatch(updatePayment(res.data.pay));   
+            dispatch(updatePayment(res.data.data));   
 
         } catch (err) {
             
-            //! remove it
-            console.log(err);
-
             if (!err.response){
                 setErrMsg(<h4 >No Server Response</h4>);
                 showPopupNote();
@@ -189,7 +191,7 @@ function Payment (props){
 
                             <div className='menufilter'>
                                 <button  className='btn-filter' type='button' onClick={()=>handleFilter('price','low')}>Low To Hight</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('price','hight')}>Hight To Low</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('price','high')}>Hight To Low</button>
                             </div >
                         </div>
 
@@ -197,7 +199,7 @@ function Payment (props){
                             date of Payment  <ArrowDropDown />
                             <div className='menufilter' style={{left:'40px'}}>
                                 <button className='btn-filter' type='button' onClick={()=>handleFilter('date','low')}>Oldest To Newest</button>
-                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','hight')}>Newest To Oldest</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','high')}>Newest To Oldest</button>
                             </div>
                         </div>
 

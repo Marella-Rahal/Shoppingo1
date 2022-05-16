@@ -12,12 +12,12 @@ function RequiredPaymentCard(props) {
     let LHeight;
     let bgColor;
 
-    if(props.repeater=='yes'){
+    if(props.repeater){
 
         repeaternote='visible';
         monthlyPrice='flex';
 
-        if(props.paid=='yes'){
+        if(props.paid){
             MonthlyPayment='yes';
         }
         else{
@@ -35,7 +35,7 @@ function RequiredPaymentCard(props) {
         monthlyPrice='none';
         monthly='none';
         pay_now='flex';
-        LHeight='70px';
+        LHeight='63.5px';
         bgColor='rgb(209 216 226 / 57%)';
     }
 
@@ -50,6 +50,11 @@ function RequiredPaymentCard(props) {
             <div style={{height:'100%',display:'flex',flexDirection:'column',lineHeight:LHeight}}>
                 <span style={{color:'#11324D'}}>
                     Payment Name &nbsp;:&nbsp;&nbsp;
+                    <span style={{color:'#6B7AA1'}}>قرض</span> 
+                </span>
+
+                <span style={{color:'#11324D'}}>
+                    Payment Type &nbsp;:&nbsp;&nbsp;
                     <span style={{color:'#6B7AA1'}}>Bank</span> 
                 </span>
 

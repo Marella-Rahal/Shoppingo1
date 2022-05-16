@@ -46,6 +46,14 @@ export const Radio=styled.input`
 
 function InsertRequiredPayment(props){
     const route=useNavigate();
+    const dispatch = useDispatch();
+    const [errMsg, setErrMsg] = useState('');
+    const token=localStorage.getItem("userToken");
+    const [Name , setName]=useState('');
+    const [Value, setValue] = useState('');
+    const [Date, setDate] = useState('');
+    const [Type, setType] = useState('Others');
+    const [Repeater,setRepeater] = useState('');
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -56,24 +64,13 @@ function InsertRequiredPayment(props){
 
 const user=useSelector((state)=>state.user);
 
-const dispatch = useDispatch();
-const [errMsg, setErrMsg] = useState('');
-const token=localStorage.getItem("userToken");
 
 
-
-const [Name , setName]=useState('');
-const [Value, setValue] = useState('');
-const [Date, setDate] = useState('');
-const [Type, setType] = useState('');
-const [Repeater,setRepeater] = useState('');
-
-
-// console.log(Name);
-// console.log(Value);
-// console.log(Date);
-// console.log(Type);
-// console.log(Repeater);
+//  console.log(Name);
+//  console.log(Value);
+//  console.log(Date);
+//  console.log(Type);
+//  console.log(Repeater);
 
 const showPopupNote = () => {
     $('.fullscreenNote').fadeTo(500, 1);
@@ -84,23 +81,27 @@ const showPopupNote = () => {
 const sendDate = (e) => {
     e.preventDefault();
     axios.post(
-            'http://localhost:8080/managment/addPaymentReq',
-            {
-                name : Name ,
-                value :Value ,
-                date : Date ,
-                type : Type ,
-                isRepeater : Repeater ,
-            },
-            {
-                header:{Authorization: `bearer ${token}`,}
+        'http://localhost:5000/managment/addPaymentReq',
+        {
+            name : Name ,
+            value :Value ,
+            date : Date ,
+            type : Type ,
+            isRepeater : Boolean(Repeater) 
+        },
+        {
+            headers:{
+                Authorization: `bearer ${token}`
             }
-        )
+        }
+    )
     .then((res)=>{
+
         dispatch(registerUser(res.data));
         route('/Mangment/RequiredPayments');
     })
     .catch((err) => {
+
         if (!err.response){
             setErrMsg(<h4 >No Server Response</h4>);
             showPopupNote();
@@ -232,7 +233,6 @@ return(
                                 <InputContainer>
                                     <Label>payment Type</Label>
                                     <select
-                                    required
                                     onChange={(e)=>setType(e.target.value)}
                                     id="cars"
                                     name="cars"
@@ -265,9 +265,9 @@ return(
                                 <Label>Payment Repeater</Label>
                                 <div style={{display:'flex',marginTop:'7px'}}>
                                     <label for='Yes'>Yes</label>
-                                    <Radio type="radio" required name='repeater' id='Yes' onClick={()=>setRepeater('True')}/>
+                                    <Radio type="radio" required name='repeater' id='Yes' onClick={()=>setRepeater(1)}/>
                                     <label for='No'>No</label>
-                                    <Radio type="radio" required name='repeater' id='No' onClick={()=>setRepeater('False')}/>
+                                    <Radio type="radio" required name='repeater' id='No' onClick={()=>setRepeater(0)}/>
                                 </div>
                         </InputContainer>
                         <Button type="submit"  style={{marginInline:'20%'}}> Insert Payment</Button>

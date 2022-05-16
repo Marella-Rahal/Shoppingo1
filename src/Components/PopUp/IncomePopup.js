@@ -50,7 +50,7 @@ function IncomePopup(props) {
       e.preventDefault();
 
        axios.post(
-          'http://localhost:8080/managment/addIncome',
+          'http://localhost:5000/managment/addIncome',
           {
             value: TotalIncome,
           },

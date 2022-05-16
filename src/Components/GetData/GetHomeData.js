@@ -12,7 +12,7 @@ function GetHomeData(props) {
 
     if(token){
 
-        axios.get('http://localhost:8080/profile',{
+        axios.get('http://localhost:5000/profile',{
             headers:{
                 authorization : `bearer ${token}`
             }

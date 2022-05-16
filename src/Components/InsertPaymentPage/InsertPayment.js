@@ -62,7 +62,7 @@ function InsertP(props) {
     try {
 
       const res=await axios.post(
-        'http://localhost:8080/managment/addpayment',
+        'http://localhost:5000/managment/addpayment',
         {
           name: PaymentName,
           value: PaymentValue,

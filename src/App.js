@@ -23,6 +23,7 @@ import Error from './Components/Error/Error';
 import GetUserData from './Components/GetData/GetUserData';
 import GetHomeData from './Components/GetData/GetHomeData';
 import GetPaymentData from './Components/GetData/GetPaymentData';
+import GetPaymentReqData from './Components/GetData/GetPaymentReqData';
 
 function App(props) {
 
@@ -45,6 +46,11 @@ function App(props) {
                   <Route path="/Mangment/Payments" element={<Payment/>}/>
                 </Route>
 
+                <Route element={<GetPaymentReqData/>}>
+                  <Route path="/Mangment/RequiredPayments" element={<RequiredPayment/>}/>
+                </Route>
+
+
                 <Route path='/Shop' element={<Shopbody/>}/>
 
                 <Route path='/LogIn' element={<LogIn/>}/>
@@ -64,10 +70,6 @@ function App(props) {
                 <Route path='/UpgradeProfile' element={<UpgradeProfile/>}/>
 
                 <Route path="/Mangment/Dashbord" element={<Dashboard/>}/>
-
-
-                <Route path="/Mangment/RequiredPayments" element={<RequiredPayment/>}/>
-
 
 
                 <Route path="/AddProduct" element={<AddProduct/>}/>

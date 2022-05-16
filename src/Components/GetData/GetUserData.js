@@ -13,17 +13,17 @@ function GetProfileData(props) {
 
     if(token){
 
-        axios.get('http://localhost:8080/profile',{
+        axios.get('http://localhost:5000/profile',{
             headers:{
                 authorization : `bearer ${token}`
             }
         }).then(res=>{
-            // console.log(res);
+            // console.log(res.data);
             dispatch(registerUser(res.data));
             
         }).catch(err=>{
-            // console.log(err);
-            route('/Error',{replace:true});    
+            // console.log(err.message);
+            route('/Error',{replace:true});
         })
 
         return <Outlet/>;

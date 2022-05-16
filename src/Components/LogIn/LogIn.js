@@ -50,7 +50,7 @@ function LogIn() {
     try{
 
       const res = await axios.post(
-        'http://localhost:8080/auth/login',
+        'http://localhost:5000/auth/login',
         {
           email:email,
           password:pwd

@@ -14,10 +14,13 @@ import RequiredPaymentCard from './RequiredPaymentCard.js';
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
+import { useSelector } from 'react-redux';
 
 
 function RequiredPayment(props){
     const route=useNavigate();
+    const user=useSelector(state=>state.user.user);
+    const req=useSelector(state=>state.payReq.paymentReq);
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -53,7 +56,7 @@ function RequiredPayment(props){
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello,Hasan</div>
+                        Hello, {user.name}</div>
 
                         <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
 
@@ -69,7 +72,7 @@ function RequiredPayment(props){
 
                             <Paragraph>Total income</Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>335,000 S.P</Paragraph>
+                            <Paragraph>{user.income} S.P</Paragraph>
                             <button style={{background:"none",border:"none",color: "#11324D"}} onClick={handlePopup}>
                                 <AddCircleOutlineIcon style={{ marginRight: "15px", fontSize: "xx-large" }}></AddCircleOutlineIcon>
                             </button>
@@ -78,7 +81,7 @@ function RequiredPayment(props){
 
                         <PaymentsInfo style={{ margin: '0px 5%' }}>
                             <Paragraph>Balance</Paragraph>
-                            <Paragraph>200,500 S.P</Paragraph>
+                            <Paragraph>{user.totalBalance} S.P</Paragraph>
                         
                         </PaymentsInfo>
 
@@ -87,7 +90,7 @@ function RequiredPayment(props){
                             Total Payments
                             </Paragraph>
                             <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "center" }}>
-                            <Paragraph>134,500 S.P </Paragraph>
+                            <Paragraph>{user.totalPayments} S.P </Paragraph>
                             
                             <Link to='/Mangment/Dashbord' style={{ marginRight: "10px",textDecoration: "none" , color: "#6b7aa1" ,fontSize:"small"}}>View All<KeyboardDoubleArrowRightIcon style={{fontSize:"small"}}/></Link>
                             </div>
@@ -135,22 +138,28 @@ function RequiredPayment(props){
 
                     <div style={{width:'97%',display:'flex',flexWrap:'wrap',justifyContent:'space-evenly'}}>
 
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='yes' paid='no'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='yes' paid='none'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='no'/>
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='yes' paid='yes'/>
-                        <RequiredPaymentCard repeater='no'/>
+                        {
+                            req.map((onereq,index)=>{
+                               return <RequiredPaymentCard key={index} name={onereq.name} value={onereq.value} type={onereq.type} date={onereq.date} repeater={onereq.isRepeater}/>
+                            })
+                        }
+
+                        <RequiredPaymentCard repeater='true' paid='true'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='true' paid='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='true' paid='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='false'/>
+                        <RequiredPaymentCard repeater='true' paid='yes'/>
+                        <RequiredPaymentCard repeater='true' paid='yes'/>
+                        <RequiredPaymentCard repeater='true' paid='yes'/>
+                        <RequiredPaymentCard repeater='true' paid='yes'/>
+                        <RequiredPaymentCard repeater='true' paid='yes'/>
+                        <RequiredPaymentCard repeater='false'/>
                         
 
                     </div>

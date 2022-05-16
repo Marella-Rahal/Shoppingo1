@@ -105,7 +105,7 @@ function SignUp() {
     try{
 
       const res = await axios.post(
-        'http://localhost:8080/auth/signup',
+        'http://localhost:5000/auth/signup',
         {
           name:user,
           email:email,

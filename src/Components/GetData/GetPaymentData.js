@@ -14,7 +14,7 @@ function GetPaymentData(props) {
 
     if(token){
 
-        axios.get('http://localhost:8080/managment/getallpayments',{
+        axios.get('http://localhost:5000/managment/getallpayments',{
             headers:{
                 authorization : `bearer ${token}`
             }
