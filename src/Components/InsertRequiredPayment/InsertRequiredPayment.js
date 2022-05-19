@@ -244,14 +244,14 @@ return(
                                     color: 'black',
                                     }}
                                     >
-                                    <option defaultValue="Others">Others</option>
+                                    <option defaultValue="OTHERS">OTHERS</option>
                                     <option defaultValue="" disabled hidden>
                                         Options
                                     </option>
-                                    <option defaultValue="Bank">Bank</option>
-                                    <option defaultValue="Rent">Rent</option>
-                                    <option defaultValue="Bills">Bills</option>
-                                    <option defaultValue="Debt">Debt</option>
+                                    <option defaultValue="BANK">BANK</option>
+                                    <option defaultValue="AJAR">AJAR</option>
+                                    <option defaultValue="FOATER">FOATER</option>
+                                    <option defaultValue="DEANS">DEANS</option>
                                    
                                     </select>
                                 </InputContainer>

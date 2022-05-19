@@ -13,11 +13,14 @@ const PaymentReqSlice=createSlice({
         updatePaymentReq :(state,action)=>{
             state.paymentReq=action.payload.payreq;
             state.message=action.payload.necessorymessage;
+        },
+        filterReqPayments :(state,action)=>{
+            state.paymentReq=action.payload.filterReqPayments;
         }
     }
 
 })
 
-export const {updatePaymentReq}=PaymentReqSlice.actions;
+export const {updatePaymentReq ,filterReqPayments}=PaymentReqSlice.actions;
 
 export default PaymentReqSlice.reducer;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React ,{useState} from 'react';
 import {Container,InnerContainer,TopNavbar,Content} from '../AddProduct/Home/AddProductCss.js';
 import {HeaderImage} from '../Profile/ProfileInfoCss';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
@@ -11,16 +11,31 @@ import KeyboardDoubleArrowRightIcon from '@mui/icons-material/KeyboardDoubleArro
 import { PaymentsContainer, PaymentsInfo, Paragraph,Button} from '../InsertPaymentPage/InsertPaymentcss';
 import './RequiredPayment.css';
 import RequiredPaymentCard from './RequiredPaymentCard.js';
-
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import axios from 'axios';
+import NotePopup from '../PopUp/NotePopup.js';
+import {filterReqPayments} from '../../Redux/Slices/PaymentReqSlice';
+
+
+
 
 
 function RequiredPayment(props){
     const route=useNavigate();
     const user=useSelector(state=>state.user.user);
     const req=useSelector(state=>state.payReq.paymentReq);
+    const necessary=useSelector(state=>state.payReq.message);
+    const token=localStorage.getItem('userToken');
+    const dispatch=useDispatch();
+    const [errMsg,setErrMsg]=useState('');
+
+    const showPopupNote=()=>{
+        $(".fullscreenNote").fadeTo(500,1);
+        $(".popupNote").fadeTo(500,1);
+        $("body").css("overflow","hidden");
+     }
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -29,8 +44,77 @@ function RequiredPayment(props){
         $('body').css("overflow","hidden");
     }
 
+    const handleFilter= async (filter,value)=>{
+        // console.log(filter);
+        // console.log(value);
+
+        let f_price,f_date,f_priorty;
+        if(filter==='price'){
+            f_price=value;
+            f_date='';
+            f_priorty='';
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
+        }
+        else if(filter==='date'){
+            f_price='';
+            f_date=value;
+            f_priorty='';
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
+
+        }
+        else if(filter==='priorty'){
+            f_price='';
+            f_date='';
+            f_priorty=value;
+
+            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
+
+        }
+
+        try {
+            
+            const res=await axios.post(
+                'http://localhost:5000/managment/filterreqpayments',
+                {
+                    filterbyvalue:f_price,
+                    filterbydate:f_date,
+                    filterbypri:f_priorty,
+                },
+                {
+                    headers:{
+                        authorization : `Bearer ${token}`
+                    }
+                });
+
+            dispatch(filterReqPayments(res.data));   
+
+        } catch (err) {
+        
+            if (!err.response){
+                setErrMsg(<h4 >No Server Response</h4>);
+                showPopupNote();
+            }
+            else if(err.response.status!==200&&err.response.status!==201&&err.response.data.message){
+                setErrMsg(<h4>{err.response.data.message}</h4>);
+                showPopupNote();
+            }
+            else if(err.response.status!==200&&err.response.status!==201&&!err.response.data.message){
+                setErrMsg(<h4>{err.message}</h4>);
+                showPopupNote();
+            }
+            else {
+                setErrMsg(<h4>Failed</h4>);
+                showPopupNote();
+            }
+            
+        }
+    }
+
     return(
         <Container>
+            <NotePopup msg={errMsg} color='red'/>
             <IncomePopup title="Please Insert Your Income Value"/>
             <SideNavbar/>
             <InnerContainer>
@@ -44,13 +128,13 @@ function RequiredPayment(props){
                     }}
                     >
                         <Link to="/Favourite">
-                        <IconButton onClick={() => { Route('/Favourite');}} style={{ color: '#6B7AA1' }}>
+                        <IconButton onClick={() => { route('/Favourite');}} style={{ color: '#6B7AA1' }}>
                             <Favorite />
                         </IconButton>
                         </Link>
 
                         <Link to="/ShoppingCard">
-                        <IconButton onClick={() => { Route('/ShoppingCard');}} style={{ color: '#6B7AA1' }}>
+                        <IconButton onClick={() => { route('/ShoppingCard');}} style={{ color: '#6B7AA1' }}>
                             <AddShoppingCart />
                         </IconButton>
                         </Link>
@@ -108,12 +192,12 @@ function RequiredPayment(props){
                             Price  <ArrowDropDown />
 
                             <div className='menufilter'>
-                                <button className='btn-filter' type='button'>Low To Hight</button>
-                                <button className='btn-filter' type='button'>Hight To Low</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('price','low')}>Low To Hight</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('price','high')}>Hight To Low</button>
                             </div >
                         </div>
 
-                        <div className='filter' style={{marginRight:'10px'}}>
+                        <div className='filter' style={{marginRight:'10px'}} onClick={()=>handleFilter('priorty','high')}>
                             Priorty  
                             {/* <ArrowDropDown /> */}
                         </div>
@@ -121,8 +205,8 @@ function RequiredPayment(props){
                         <div className='filter'>
                             date of Payment  <ArrowDropDown />
                             <div className='menufilter' style={{left:'40px'}}>
-                                <button className='btn-filter' type='button'>Oldest To Newest</button>
-                                <button className='btn-filter' type='button'>Newest To Oldest</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','low')}>Oldest To Newest</button>
+                                <button className='btn-filter' type='button' onClick={()=>handleFilter('date','high')}>Newest To Oldest</button>
                             </div>
                         </div>
 
@@ -140,26 +224,12 @@ function RequiredPayment(props){
 
                         {
                             req.map((onereq,index)=>{
-                               return <RequiredPaymentCard key={index} name={onereq.name} value={onereq.value} type={onereq.type} date={onereq.date} repeater={onereq.isRepeater}/>
+                               return <RequiredPaymentCard key={index} name={onereq.name} type={onereq.type} value={onereq.value} date={onereq.date} repeater={onereq.isRepeater}
+                               rest={onereq.almotabaki}
+                               paid={onereq.paymentuntilnow}
+                               monthly={onereq.everyPaidValueRepeater}/>
                             })
                         }
-
-                        <RequiredPaymentCard repeater='true' paid='true'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='true' paid='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='true' paid='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='false'/>
-                        <RequiredPaymentCard repeater='true' paid='yes'/>
-                        <RequiredPaymentCard repeater='true' paid='yes'/>
-                        <RequiredPaymentCard repeater='true' paid='yes'/>
-                        <RequiredPaymentCard repeater='true' paid='yes'/>
-                        <RequiredPaymentCard repeater='true' paid='yes'/>
-                        <RequiredPaymentCard repeater='false'/>
                         
 
                     </div>

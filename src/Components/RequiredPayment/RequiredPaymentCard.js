@@ -50,27 +50,27 @@ function RequiredPaymentCard(props) {
             <div style={{height:'100%',display:'flex',flexDirection:'column',lineHeight:LHeight}}>
                 <span style={{color:'#11324D'}}>
                     Payment Name &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>قرض</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.name}</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Payment Type &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>Bank</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.type}</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Price &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>432000 s.p</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.value} s.p</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Payment Expiry Date &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>09/03/2022</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.date}</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Payment Repeater &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>{props.repeater}</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.repeater?'Yes':'No'}</span> 
                 </span>
             </div>
 
@@ -78,17 +78,17 @@ function RequiredPaymentCard(props) {
 
                 <span style={{color:'#11324D'}}>
                     The Rest &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>200000 s.p</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.rest} s.p</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Paid So Far &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>232000 s.p</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.paid} s.p</span> 
                 </span>
 
                 <span style={{color:'#11324D'}}>
                     Monthly Installment &nbsp;:&nbsp;&nbsp;
-                    <span style={{color:'#6B7AA1'}}>23000 s.p</span> 
+                    <span style={{color:'#6B7AA1'}}>{props.monthly} s.p</span> 
                 </span>
 
             </div>
