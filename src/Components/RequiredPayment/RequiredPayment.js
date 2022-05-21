@@ -224,10 +224,11 @@ function RequiredPayment(props){
 
                         {
                             req.map((onereq,index)=>{
-                               return <RequiredPaymentCard key={index} name={onereq.name} type={onereq.type} value={onereq.value} date={onereq.date} repeater={onereq.isRepeater}
+                               return <RequiredPaymentCard key={index} id={onereq._id} name={onereq.name} type={onereq.type} value={onereq.value} date={onereq.date} repeater={onereq.isRepeater}
                                rest={onereq.almotabaki}
                                paid={onereq.paymentuntilnow}
-                               monthly={onereq.everyPaidValueRepeater}/>
+                               monthly={onereq.everyPaidValueRepeater}
+                               message={onereq.typeMessage}/>
                             })
                         }
                         
