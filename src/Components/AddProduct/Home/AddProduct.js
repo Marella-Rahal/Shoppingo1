@@ -77,7 +77,7 @@ function AddProduct(props) {
   const [womanChecked, setwomanChecked] = useState(false);
   const [Color, setColor] = useState('');
   const [noteMsg, setNoteMsg] = useState('');
-  const [file, setFile] = useState(require('../../../Images/Default.jpg'));
+  const [file, setFile] = useState(require('../../../Images/defaultProduct.jfif'));
   
   const [image,setImage]=useState();
   useEffect(()=>{
