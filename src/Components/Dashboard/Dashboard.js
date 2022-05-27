@@ -1,4 +1,4 @@
-import React from 'react'
+import React ,{useState,useEffect}from 'react'
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import BarChart2 from './BarChart';
@@ -11,8 +11,8 @@ import {
 } from '../AddProduct/Home/AddProductCss';
 import {
   Container,
-  HeaderImage
-} from '../Profile/ProfileInfoCss'
+} from '../Profile/ProfileInfoCss';
+import HeaderImage from '../Profile/HeaderImage';
 import { IconButton } from '@mui/material';
 import{Lsection,TlSection,ParentSection,Span,Button,InnerContainer,Bsection,BsectionContent,MiddleSection,MiddleSectionContent,PaymentInfo,RightSection,ColorDiv,ColorButton,ColorContainer} from'./DashboardCss';
 import { PaymentsContainer, PaymentsInfo, Paragraph, Input, InputContainer, FormContainer } from '../InsertPaymentPage/InsertPaymentcss';
@@ -22,9 +22,21 @@ import CreditCardIcon from '@mui/icons-material/CreditCard';
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
+import { useSelector } from 'react-redux';
 
 function Dashboard() {
   const route = useNavigate();
+  const user=useSelector(state=>state.user);
+  const [image,setImage]=useState();
+  useEffect(()=>{
+    
+    if(user.user.imageUrl.length>1){
+      setImage(`http://localhost:5000/${user.user.imageUrl}`);
+    }
+    else{
+      setImage(require('../../Images/Default.jpg'));
+    }
+  })
 
   const handlePopup=(e)=>{
     e.preventDefault();
@@ -71,11 +83,11 @@ function Dashboard() {
           </Link>
 
           <div style={{ marginTop: '7px', fontSize: '15px' }}>
-            Hello,Hasan
+            Hello , Hasan
           </div>
 
 
-          <HeaderImage onClick={() => { route('/Profile') }} />
+          <HeaderImage image={image}  />
 
 
         </div>

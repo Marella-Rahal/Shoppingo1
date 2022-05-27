@@ -1,8 +1,8 @@
 import { AddShoppingCart, Favorite, Home, LogoutOutlined } from '@mui/icons-material';
-import {HeaderImage} from '../../Profile/ProfileInfoCss';
+import HeaderImage from '../../Profile/HeaderImage';
 import { IconButton } from '@mui/material';
 import {Link , useNavigate,Navigate,useLocation} from 'react-router-dom';
-import React, { useRef , useEffect } from 'react';
+import React, { useRef , useEffect,useState } from 'react';
 import './Navbar.css';
 import {useDispatch, useSelector} from 'react-redux';
 import $ from 'jquery';
@@ -14,10 +14,22 @@ function Navbar(props) {
     const user=useSelector(state=>state.user);
     const dispatch=useDispatch();
     const tabs=useRef();
+    const token=localStorage.getItem('userToken');
+
+    const [image,setImage]=useState();
+    useEffect(()=>{
+        
+        if(user.user.imageUrl.length>1){
+        setImage(`http://localhost:5000/${user.user.imageUrl}`);
+        }
+        else{
+        setImage(require('../../../Images/Default.jpg'));
+        }
+    })
 
     useEffect(()=>{
 
-        if(user.user.name){
+        if(token){
 
             $('.sign-btn').css('display','none');
             $('.log-btn').css('display','none');
@@ -110,7 +122,7 @@ function Navbar(props) {
                 Hello , {user.user.name}
                 </div>
 
-                <HeaderImage className='user-info' style={{marginTop:'7px'}} onClick={()=>{route('/Profile')}}/>
+                <HeaderImage image={image} className='user-info' style={{marginTop:'7px'}} />
 
 
             </div>

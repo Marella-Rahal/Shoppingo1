@@ -94,7 +94,7 @@ function RequiredPaymentCard(props){
         <div style={{width:'300px',minHeight:'550px',lineHeight:'40px',borderRadius:'20px',padding:'10px',backgroundColor:bgColor,marginBottom:'20px',marginRight:'15px',display:'flex',flexDirection:'column',boxShadow:'5px 5px 5px 5px rgba(0,0,0,0.25)'}}>
 
             {
-                props.repeater ?
+                props.repeater?
             
                      <div style={{height:'100%',display:'flex',flexDirection:'column'}}>
 

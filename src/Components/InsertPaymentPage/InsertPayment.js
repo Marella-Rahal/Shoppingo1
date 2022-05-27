@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { AddShoppingCart, Favorite } from '@mui/icons-material';
 import axios from 'axios';
@@ -9,7 +9,7 @@ import {
   Label,
   InnerContainer,
 } from '../AddProduct/Home/AddProductCss';
-import { HeaderImage } from '../Profile/ProfileInfoCss';
+import  HeaderImage  from '../Profile/HeaderImage';
 import {
   PaymentsContainer,
   PaymentsInfo,
@@ -45,6 +45,17 @@ function InsertP(props) {
   // console.log(PaymentValue,typeof(PaymentValue));
   // console.log(PaymentDate,typeof(PaymentDate));
   // console.log(PaymentType,typeof(PaymentType));
+
+  const [image,setImage]=useState();
+  useEffect(()=>{
+    
+    if(user.user.imageUrl.length>1){
+      setImage(`http://localhost:5000/${user.user.imageUrl}`);
+    }
+    else{
+      setImage(require('../../Images/Default.jpg'));
+    }
+  })
 
   const handlePopup = (e) => {
     e.preventDefault();
@@ -140,12 +151,11 @@ function InsertP(props) {
             </Link>
 
             <div style={{ marginTop: '10px', fontSize: '15px' }}>
-              Hello,{user.user.name}
+              Hello , {user.user.name}
             </div>
             <HeaderImage
-              onClick={() => {
-                route('/Profile');
-              }}
+              image={image}
+              
             ></HeaderImage>
           </div>
         </TopNavbar>

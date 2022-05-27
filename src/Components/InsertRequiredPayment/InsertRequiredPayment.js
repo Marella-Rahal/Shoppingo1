@@ -1,7 +1,7 @@
-import React ,{useState}from 'react';
+import React ,{useState,useEffect}from 'react';
 import axios from 'axios';
 import {Container,InnerContainer,TopNavbar,Content,Label} from '../AddProduct/Home/AddProductCss.js';
-import {HeaderImage} from '../Profile/ProfileInfoCss';
+import HeaderImage from '../Profile/HeaderImage';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { useNavigate } from 'react-router';
 import { IconButton } from '@mui/material';
@@ -54,6 +54,18 @@ function InsertRequiredPayment(props){
     const [Date, setDate] = useState('');
     const [Type, setType] = useState('Others');
     const [Repeater,setRepeater] = useState('');
+    const user=useSelector((state)=>state.user);
+
+    const [image,setImage]=useState();
+    useEffect(()=>{
+      
+      if(user.user.imageUrl.length>1){
+        setImage(`http://localhost:5000/${user.user.imageUrl}`);
+      }
+      else{
+        setImage(require('../../Images/Default.jpg'));
+      }
+    })
 
     const handlePopup=(e)=>{
         e.preventDefault();
@@ -62,7 +74,7 @@ function InsertRequiredPayment(props){
         $('body').css("overflow","hidden");
     }
 
-const user=useSelector((state)=>state.user);
+
 
 
 
@@ -150,9 +162,9 @@ return(
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello,{user.user.name}</div>
+                        Hello , {user.user.name}</div>
 
-                        <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
+                        <HeaderImage image={image} ></HeaderImage>
 
                     </div>
 

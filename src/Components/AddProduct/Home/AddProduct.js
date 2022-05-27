@@ -39,7 +39,7 @@ import {
   Form,
 } from './AddProductCss';
 
-import { HeaderImage } from '../../Profile/ProfileInfoCss';
+import HeaderImage  from '../../Profile/HeaderImage';
 import $ from 'jquery';
 import NotePopup from '../../PopUp/NotePopup';
 import { registerUser } from '../../../Redux/Slices/UserSlice';
@@ -55,7 +55,6 @@ let  ColorArr = [];
 function AddProduct(props) {
   const  user= useSelector((state) => state.user);
   const route = useNavigate();
-
 
   const [errMsg, setErrMsg] = useState('');
   const token=localStorage.getItem('userToken',);
@@ -79,8 +78,17 @@ function AddProduct(props) {
   const [Color, setColor] = useState('');
   const [noteMsg, setNoteMsg] = useState('');
   const [file, setFile] = useState(require('../../../Images/Default.jpg'));
-
-
+  
+  const [image,setImage]=useState();
+  useEffect(()=>{
+    
+    if(user.user.imageUrl.length>1){
+      setImage(`http://localhost:5000/${user.user.imageUrl}`);
+    }
+    else{
+      setImage(require('../../../Images/Default.jpg'));
+    }
+  })
 
   const onFileChange = (event) => {
     setselectImag(event.target.files[0]);
@@ -176,7 +184,7 @@ function AddProduct(props) {
     .then(
       (res)=>
       {
-      console.log(res.data);
+      // console.log(res.data);
       route('/Mangment/SellerDashboard');
       }
     )
@@ -244,12 +252,10 @@ function AddProduct(props) {
             </Link>
 
             <div style={{ marginTop: '10px', fontSize: '15px' }}>
-              Hello,{user.user.name}
+              Hello , {user.user.name}
             </div>
-            <HeaderImage
-              onClick={() => {
-                route('/Profile');
-              }}
+            <HeaderImage image={image}
+              
             />
           </div>
         </TopNavbar>

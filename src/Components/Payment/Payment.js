@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import {
   Container,
   InnerContainer,
   TopNavbar,
   Content,
 } from '../AddProduct/Home/AddProductCss.js';
-import { HeaderImage } from '../Profile/ProfileInfoCss';
+import  HeaderImage  from '../Profile/HeaderImage';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { useNavigate } from 'react-router';
 import { IconButton } from '@mui/material';
@@ -35,6 +35,17 @@ function Payment(props) {
   const token = localStorage.getItem('userToken');
   const dispatch = useDispatch();
   const [errMsg, setErrMsg] = useState('');
+
+  const [image,setImage]=useState();
+  useEffect(()=>{
+    
+    if(user.imageUrl.length>1){
+      setImage(`http://localhost:5000/${user.imageUrl}`);
+    }
+    else{
+      setImage(require('../../Images/Default.jpg'));
+    }
+  })
 
   const showPopupNote = () => {
     $('.fullscreenNote').fadeTo(500, 1);
@@ -153,13 +164,10 @@ function Payment(props) {
             </Link>
 
             <div style={{ marginTop: '10px', fontSize: '15px' }}>
-              Hello, {user.name}
+              Hello , {user.name}
             </div>
 
-            <HeaderImage
-              onClick={() => {
-                route('/Profile');
-              }}
+            <HeaderImage image={image}
             ></HeaderImage>
           </div>
         </TopNavbar>

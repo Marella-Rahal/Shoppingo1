@@ -39,15 +39,7 @@ export const Title = styled.h1`
   font-weight: 700;
   color: #11324d;
 `;
-export const HeaderImage = styled.div`
-   background: transparent url(${defaultImage}) no-repeat center 0;
-   cursor:pointer; 
-   background-size: contain;
-   margin-left: 5px;
-   width: 40px;
-   height: 40px;
-   border-radius: 50px;
-`;
+
 export const Button1 = styled.button`
 width: 20%;
 // height: 35px;

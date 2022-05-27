@@ -55,7 +55,6 @@ const UserSlice=createSlice({
             state.user.v=x.user.v; 
 
             state.token=x.token;
-
         },
     }
     

@@ -1,6 +1,6 @@
-import React ,{useState} from 'react';
+import React ,{useState,useEffect} from 'react';
 import {Container,InnerContainer,TopNavbar,Content} from '../AddProduct/Home/AddProductCss.js';
-import {HeaderImage} from '../Profile/ProfileInfoCss';
+import HeaderImage from '../Profile/HeaderImage';
 import SideNavbar from '../AddProduct/SideNavbar/SideNavbar';
 import { useNavigate } from 'react-router';
 import { IconButton } from '@mui/material';
@@ -19,9 +19,6 @@ import NotePopup from '../PopUp/NotePopup.js';
 import {filterReqPayments} from '../../Redux/Slices/PaymentReqSlice';
 
 
-
-
-
 function RequiredPayment(props){
     const route=useNavigate();
     const user=useSelector(state=>state.user.user);
@@ -30,6 +27,29 @@ function RequiredPayment(props){
     const token=localStorage.getItem('userToken');
     const dispatch=useDispatch();
     const [errMsg,setErrMsg]=useState('');
+    const [image,setImage]=useState();
+    useEffect(()=>{
+      
+      if(user.imageUrl.length>1){
+        setImage(`http://localhost:5000/${user.imageUrl}`);
+      }
+      else{
+        setImage(require('../../Images/Default.jpg'));
+      }
+    })
+
+    useEffect(()=>{
+
+        if(necessary.length>0){
+            const n=necessary.map(n => {
+                return <h4> {n} </h4>
+            })
+    
+            setErrMsg(n);
+            showPopupNote();
+        }
+
+    },[]);
 
     const showPopupNote=()=>{
         $(".fullscreenNote").fadeTo(500,1);
@@ -45,32 +65,22 @@ function RequiredPayment(props){
     }
 
     const handleFilter= async (filter,value)=>{
-        // console.log(filter);
-        // console.log(value);
 
         let f_price,f_date,f_priorty;
         if(filter==='price'){
             f_price=value;
             f_date='';
             f_priorty='';
-
-            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
         }
         else if(filter==='date'){
             f_price='';
             f_date=value;
             f_priorty='';
-
-            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
-
         }
         else if(filter==='priorty'){
             f_price='';
             f_date='';
             f_priorty=value;
-
-            // console.log('price: '+f_price+" date: "+f_date+" type: "+f_type);
-
         }
 
         try {
@@ -140,9 +150,9 @@ function RequiredPayment(props){
                         </Link>
 
                         <div style={{ marginTop: "10px", fontSize: '15px' }}>
-                        Hello, {user.name}</div>
+                        Hello , {user.name}</div>
 
-                        <HeaderImage onClick={() => { route('/Profile') }}></HeaderImage>
+                        <HeaderImage image={image}></HeaderImage>
 
                     </div>
 
