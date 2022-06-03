@@ -67,7 +67,7 @@ function LogIn() {
       setPwd('');
 
       //todo route after a success log in                                                  
-      route(from,{replace:true});
+      route('/');
 
       //todo pop_up after sending the info 
 

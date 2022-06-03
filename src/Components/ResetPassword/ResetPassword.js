@@ -18,6 +18,9 @@ function ResetPassword(props) {
     const [email,setEmail]=useState('');
     const [validEmail,setValidEmail]=useState(false);
 
+    const [disableEmail,setDisableEmail]=useState(false);
+
+
     const [code,setCode]=useState('');
     const [adminCode,setAdminCode]=useState('');
     const [validCode,setValidCode]=useState(false);
@@ -50,7 +53,7 @@ function ResetPassword(props) {
         setValidMatch(pwd === matchPwd);
     }, [pwd, matchPwd])
 
-    //*********************** functions *****************************
+    //*********************** functions ***************
 
     const sendingEmail=async(e)=>{
 
@@ -75,10 +78,10 @@ function ResetPassword(props) {
                     email:email
                 }
             )
-                //! *********
-                console.log(res.data);
-                // setAdminCode(res.data);
-                // setDisableCode(false);
+            
+                setAdminCode(res.data.numRan);
+                setDisableEmail(true);
+                setDisableCode(false);
             
         } catch (err) {
 
@@ -111,6 +114,7 @@ function ResetPassword(props) {
             return;
         }
 
+        setDisableCode(true);
         setDisablePwd(false);
 
     }
@@ -149,8 +153,8 @@ function ResetPassword(props) {
             setCode('');
             setPwd('');
             setMatchPwd('');
-            //! **************
-            route('/LogIn',{replace:true});
+    
+            route('/LogIn');
             
             
         } catch (err) {
@@ -207,11 +211,12 @@ function ResetPassword(props) {
                     type="email"
                     value={email}
                     onChange={e=>{setEmail(e.target.value)}}
+                    disabled={disableEmail}
                     placeholder="     Enter Your Email address"
                     ></Input>
 
                     {/* //***********  */}
-                    <Sendcode onClick={sendingEmail}>send code</Sendcode>
+                    <Sendcode disabled={disableEmail} onClick={sendingEmail}>send code</Sendcode>
 
                     <Input
                     type="text"
@@ -222,7 +227,7 @@ function ResetPassword(props) {
                     ></Input>
 
                     {/* //*************  */}
-                    <Input2 onClick={checkingCode} style={{alignSelf:'self-end'}}>Check code</Input2>
+                    <Input2 disabled={disableCode} onClick={checkingCode} style={{alignSelf:'self-end'}}>Check code</Input2>
 
                     <Input
                     type="password"
@@ -241,7 +246,7 @@ function ResetPassword(props) {
                     ></Input>
 
                     {/* //*************** */}
-                    <Input2 style={{alignSelf:'self-end'}} onClick={handlesubmit}>Update Password</Input2>
+                    <Input2  disabled={disablePwd} style={{alignSelf:'self-end'}} onClick={handlesubmit}>Update Password</Input2>
 
 
                 </Form>
