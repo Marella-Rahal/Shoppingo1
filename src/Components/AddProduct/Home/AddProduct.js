@@ -41,7 +41,7 @@ import {
 
 import HeaderImage  from '../../Profile/HeaderImage';
 import $ from 'jquery';
-import NotePopup from '../../PopUp/NotePopup';
+import NotePopup ,{showPopupNote}from '../../PopUp/NotePopup';
 import { registerUser } from '../../../Redux/Slices/UserSlice';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -118,12 +118,6 @@ function AddProduct(props) {
   };
 
   //todo create product color
-
-  const showPopupNote = () => {
-    $('.fullscreenNote').fadeTo(500, 1);
-    $('.popupNote').fadeTo(500, 1);
-    $('body').css('overflow', 'hidden');
-  };
     
   const addColorFunc = (e) => {
     e.preventDefault();
@@ -214,7 +208,7 @@ function AddProduct(props) {
 
   return (
     <Container>
-      {/* <NotePopup msg={noteMsg} color="#6b7aa1" /> */}
+      <NotePopup msg={errMsg} color="red" />
       <SideNavbar />
       <InnerContainer>
         <TopNavbar>

@@ -6,7 +6,7 @@ import { Clear } from '@mui/icons-material';
 import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../Redux/Slices/UserSlice';
-import NotePopup from './NotePopup';
+import NotePopup, { showPopupNote } from './NotePopup';
 export const Popup = styled.div`
   display: none;
   width: 90%;
@@ -38,12 +38,6 @@ function IncomePopup(props) {
     $('.popupdiv').fadeOut(500);
     $('.fullscreen').fadeOut(500);
     $('body').css('overflow', 'auto');
-  };
-
-  const showPopupNote = () => {
-    $('.fullscreenNote').fadeTo(500, 1);
-    $('.popupNote').fadeTo(500, 1);
-    $('body').css('overflow', 'hidden');
   };
  
     const sendIncome = (e) => {

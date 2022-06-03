@@ -3,7 +3,7 @@ import Navbar from '../Home/Navbar/Navbar';
 import LSbackground from '../../Images/SignUp2.jpg';
 import {Lsection,Overlay,Title,Span,Contain,Button1,Button1C,Button2,Button2c,Input,Input2,Container,Rsection,ButtonS,Form,BlueFacebook,RedGoogle,HLine} from './SignUPcss.js';
 import {FullScreen,Popup,ChooseContainer,ChooseButton,VLine} from '../LogIn/LogIncss';
-import NotePopup from '../PopUp/NotePopup';
+import NotePopup ,{showPopupNote}from '../PopUp/NotePopup';
 import { useNavigate } from 'react-router';
 import $ from 'jquery';
 import axios from 'axios';
@@ -48,12 +48,6 @@ function SignUp() {
     setValidPwd(PWD_REGEX.test(pwd));
     setValidMatch(pwd === matchPwd);
   }, [pwd, matchPwd])
-
-  const showPopupNote=()=>{
-    $(".fullscreenNote").fadeTo(500,1);
-    $(".popupNote").fadeTo(500,1);
-    $("body").css("overflow","hidden");
-  }
 
   const handlesubmit = async (e) => {
 

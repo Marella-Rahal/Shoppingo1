@@ -6,8 +6,9 @@ import { IconButton, requirePropFactory } from '@mui/material';
 import { Route, Link,useNavigate } from 'react-router-dom';
 import {Container,InnerContainer,Content,Title,Button1,Button} from './ProfileInfoCss';
 import { useDispatch, useSelector } from 'react-redux';
+import {useLocation} from 'react-router';
 import axios from 'axios';
-import NotePopup from '../PopUp/NotePopup';
+import NotePopup, { showPopupNote } from '../PopUp/NotePopup';
 import $ from 'jquery';
 import { registerUser } from '../../Redux/Slices/UserSlice';
 import HeaderImage from './HeaderImage';
@@ -18,6 +19,7 @@ function ProfileInfo(props) {
 
   const route=useNavigate();
   const [Input,setInput]=useState(true);
+  const [upgrade,setUpgrade]=useState(true);
   const userInfo=useSelector(state=> state.user.user);
   const [name,setName]=useState(userInfo.name);
   const [pwd,setPwd]=useState(userInfo.password);
@@ -29,7 +31,6 @@ function ProfileInfo(props) {
   const dispatch=useDispatch();
 
   //******************
-
   useEffect(()=>{
     
     if(userInfo.imageUrl.length>1){
@@ -38,13 +39,16 @@ function ProfileInfo(props) {
     else{
       setImage(require('../../Images/Default.jpg'));
     }
-  })
 
-  const showPopupNote=()=>{
-    $(".fullscreenNote").fadeTo(500,1);
-    $(".popupNote").fadeTo(500,1);
-    $("body").css("overflow","hidden");
-  }
+    //*disable the upgrade button when the user is already a seller
+    if(userInfo.status==1){
+      setUpgrade(true);
+    }
+    else{
+      setUpgrade(false);
+    }
+    
+  })
 
 
   //* change image and sending it 
@@ -217,7 +221,7 @@ function ProfileInfo(props) {
                 <Button type="submit">Done</Button>
             </form>
             
-            <Button style={{minHeight:'50px',width:'63%'}} onClick={()=>{route('/UpgradeProfile')}}>Upgrade Your account to seller</Button>
+            <Button disabled={upgrade} style={{minHeight:'50px',width:'63%'}} onClick={()=>{route('/UpgradeProfile')}}>Upgrade Your account to seller</Button>
             
           </Section>
 

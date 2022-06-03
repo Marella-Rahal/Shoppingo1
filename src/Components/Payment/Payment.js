@@ -26,7 +26,7 @@ import $ from 'jquery';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { updatePayment } from '../../Redux/Slices/PaymentSlice.js';
-import NotePopup from '../PopUp/NotePopup.js';
+import NotePopup, { showPopupNote } from '../PopUp/NotePopup.js';
 
 function Payment(props) {
   const route = useNavigate();
@@ -46,12 +46,6 @@ function Payment(props) {
       setImage(require('../../Images/Default.jpg'));
     }
   })
-
-  const showPopupNote = () => {
-    $('.fullscreenNote').fadeTo(500, 1);
-    $('.popupNote').fadeTo(500, 1);
-    $('body').css('overflow', 'hidden');
-  };
 
   const handlePopup = (e) => {
     e.preventDefault();

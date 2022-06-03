@@ -33,16 +33,16 @@ function Navbar(props) {
 
             $('.sign-btn').css('display','none');
             $('.log-btn').css('display','none');
-            $('.log-out').css('display','inline');
             $('.user-info').css('display','inline');
+            $('.image').css('display','inline');
 
         }
         else{
 
             $('.sign-btn').css('display','inline');
             $('.log-btn').css('display','inline');
-            $('.log-out').css('display','none');
             $('.user-info').css('display','none');
+            $('.image').css('display','none');
 
         }
 
@@ -122,7 +122,9 @@ function Navbar(props) {
                 Hello , {user.user.name}
                 </div>
 
-                <HeaderImage image={image} className='user-info' style={{marginTop:'7px'}} />
+                <div className='image'>
+                    <HeaderImage  image={image}  style={{marginTop:'7px'}} />
+                </div>
 
 
             </div>

@@ -25,7 +25,7 @@ import {
 import { useNavigate ,useLocation } from 'react-router';
 import $ from 'jquery';
 import axios from 'axios';
-import NotePopup from '../PopUp/NotePopup';
+import NotePopup, { showPopupNote } from '../PopUp/NotePopup';
 import { registerUser } from '../../Redux/Slices/UserSlice';
 import { useDispatch } from 'react-redux' 
 
@@ -100,11 +100,6 @@ function LogIn() {
 
   };
 
-  const showPopupNote=()=>{
-    $(".fullscreenNote").fadeTo(500,1);
-    $(".popupNote").fadeTo(500,1);
-    $("body").css("overflow","hidden");
-  }
 
   return (
     <>

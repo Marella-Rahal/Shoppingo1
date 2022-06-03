@@ -15,7 +15,11 @@ box-shadow:2px 2px 5px 5px white;
 text-align:center;
 padding:20px;
 `
-
+export const showPopupNote=()=>{
+    $(".fullscreenNote").fadeTo(500,1);
+    $(".popupNote").fadeTo(500,1);
+    $("body").css("overflow","hidden");
+}
 function NotePopup(props) {
 
     const clearPopup=()=>{

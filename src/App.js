@@ -38,6 +38,7 @@ function App(props) {
 
                 <Route element={<GetUserData/>}>
                   <Route path="/Profile" element={<Profile/>}/>
+                  <Route path='/UpgradeProfile' element={<UpgradeProfile/>}/>
                   <Route path="/Mangment/InsertPayments" element={<InsertP/>}/>
                   <Route path="/Mangment/InsertRequiredPayments" element={<InsertRequiredPayment/>}/>
                 </Route>
@@ -67,7 +68,6 @@ function App(props) {
 
                 <Route path="/ProductDetail" element={<Productdetailbody/>}/>           
 
-                <Route path='/UpgradeProfile' element={<UpgradeProfile/>}/>
 
                 <Route path="/Mangment/Dashbord" element={<Dashboard/>}/>
 

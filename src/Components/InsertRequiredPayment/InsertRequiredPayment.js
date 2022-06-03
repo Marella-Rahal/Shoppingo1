@@ -13,6 +13,8 @@ import { PaymentsContainer, PaymentsInfo, Paragraph,Input, InputContainer, Butto
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../Redux/Slices/UserSlice';
+import NotePopup, { showPopupNote } from '../PopUp/NotePopup';
+
 
 import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
@@ -75,21 +77,6 @@ function InsertRequiredPayment(props){
     }
 
 
-
-
-
-//  console.log(Name);
-//  console.log(Value);
-//  console.log(Date);
-//  console.log(Type);
-//  console.log(Repeater);
-
-const showPopupNote = () => {
-    $('.fullscreenNote').fadeTo(500, 1);
-    $('.popupNote').fadeTo(500, 1);
-    $('body').css('overflow', 'hidden');
-  };
-
 const sendDate = (e) => {
     e.preventDefault();
     axios.post(
@@ -137,6 +124,7 @@ const sendDate = (e) => {
 
 return(
         <Container>
+            <NotePopup msg={errMsg} color='red'/>
             <IncomePopup title="Please Insert Your Income Value"/>
             <SideNavbar/>
             <InnerContainer>

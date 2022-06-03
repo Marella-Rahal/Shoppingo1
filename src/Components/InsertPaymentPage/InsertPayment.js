@@ -28,7 +28,7 @@ import IncomePopup from '../PopUp/IncomePopup';
 import $ from 'jquery';
 import { useDispatch, useSelector } from 'react-redux';
 import { registerUser } from '../../Redux/Slices/UserSlice';
-import NotePopup from '../PopUp/NotePopup';
+import NotePopup, { showPopupNote } from '../PopUp/NotePopup';
 
 function InsertP(props) {
   const dispatch = useDispatch();
@@ -63,11 +63,7 @@ function InsertP(props) {
     $('.fullscreen').fadeTo(700, 1);
     $('body').css('overflow', 'hidden');
   };
-  const showPopupNote = () => {
-    $('.fullscreenNote').fadeTo(500, 1);
-    $('.popupNote').fadeTo(500, 1);
-    $('body').css('overflow', 'hidden');
-  };
+
   const sendData = async (e) => {
     e.preventDefault();
     try {
